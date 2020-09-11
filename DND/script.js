@@ -6,7 +6,14 @@ const monster = createRandomPerson(null, true);
 displayPerson(myPerson);
 displayPerson(monster);
 
-meetMonster(myPerson, monster);
+
+
+if (walk()) {
+    meetMonster(myPerson, monster);
+} else {
+    alert("Игра окончена!");
+}
+// meetMonster(myPerson, monster);
 
 
 // -------------------------   FUNCTIONS   ---------------------------------
@@ -17,6 +24,9 @@ function fighting(attacker, defender) {
         if (defender.alive) {
             attack(defender, attacker);
         }
+        // if (!attacker.isRobot && attacker.alive && !defender.alive) {
+        //     meetMonster(attacker, defender)
+        // }
     } while (attacker.alive && defender.alive);    
 }
 
@@ -75,6 +85,8 @@ function attack(attacker, defender) {
     if (attackStrength <= 0) {
         document.write(`${attacker.name} на столько сильно размахнулся, что уронил меч!`)
 
+    } else if (defendStrength <= 0) {
+        document.write(`${defender.name} оборонялся, но уронил щит и получил удар в ${posNames[attackPosition]} со всей силой! <br>`)
     } else {
         document.write(
             `${attacker.name} атакует ${posNames[attackPosition]} ${defender.name} с силой: ${attackStrength}<br>` +
@@ -113,5 +125,31 @@ function meetMonster(person, monster) {
         }
     } else {
         fighting(person, monster);
+    }
+}
+
+function walk() {
+    const whatYouSee = ["Пещера", "Магазин"];
+    const generatePlace = Math.floor(Math.random() * whatYouSee.length);
+    const walkingTo = askQ(
+        `Вы идёте, вы видите: ${whatYouSee[generatePlace]}, 1 = зайти в ${whatYouSee[generatePlace]}, 2 = идти дальше`, ["1", "2"]
+        );
+    if (walkingTo == 1) {
+       return walkTo(`${whatYouSee[generatePlace]}`);
+    } else {
+        alert(`вы прошли ${whatYouSee[generatePlace]}`);
+    }
+}
+
+function walkTo(nameOfPlace) {
+    if (nameOfPlace == "Пещера") {
+        const DWelcome = askQ("вы зашли в пещеру, вы видите впереди силуэт. Подойдёте? 1 = да, 2 = нет", ["1", "2"]);
+        if (DWelcome == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        const MWelcome = askQ("Вы зашли в магазин, в продаже меч за 300 монет, берёте? 1 = да, 2 = нет", ["1", "2"]);
     }
 }
